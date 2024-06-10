@@ -1,12 +1,16 @@
 package com.humbur.shortdictionary.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.humbur.shortdictionary.R
 import com.humbur.shortdictionary.databinding.FragmentSearch2Binding
 import com.humbur.shortdictionary.local.AssetDatabaseOpenHelper
 import com.humbur.shortdictionary.model.Dictionary
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class SearchFragment : Fragment(R.layout.fragment_search2) {
@@ -21,21 +25,24 @@ class SearchFragment : Fragment(R.layout.fragment_search2) {
         list = ArrayList<Dictionary>()
 
 
-        val data = AssetDatabaseOpenHelper(requireContext(), "database/dictionary.db")
-//        val cursor = data.saveDatabase().rawQuery("SELECT * FROM `dictionary`", null)
-//        while (cursor.moveToNext()) {
-//            val id = cursor.getInt(1)
-//            val short = cursor.getString(2)
-//            val full = cursor.getString(3)
-//            val uzb = cursor.getString(4)
-//            val dictionary = Dictionary(id, short, full, uzb)
-//            (list as ArrayList<Dictionary>).add(dictionary)
-//        }
-//        binding?.recyclerView?.adapter = Adapter(list!!,object:Adapter.SetOnClickedListener{
-//            override fun itemClicked(position: Int) {
-//
-//            }
-//        })
+
+            val data = AssetDatabaseOpenHelper(requireContext(), "database.db")
+            val cursor = data.saveDatabase().rawQuery("SELECT * FROM `short_dictionary`", null)
+            while (cursor.moveToNext()) {
+                if (cursor.getString(1).isNotEmpty()){
+                    val id = cursor.getInt(0)
+                    val short = cursor.getString(1)
+                    val full = cursor.getString(2)
+                    val uzb = cursor.getString(3)
+                    list?.add(Dictionary(id, short, full, uzb))
+                }
+            }
+            binding?.recyclerView?.adapter = Adapter(list!!,object:Adapter.SetOnClickedListener {
+                override fun itemClicked(position: Int) {
+
+                }
+            })
+
     }
 
     override fun onDestroyView() {
