@@ -11,13 +11,13 @@ import java.io.OutputStream
 class AssetDatabaseOpenHelper(private val context: Context, private val DB_NAME: String) {
     fun saveDatabase(): SQLiteDatabase {
         val dbFile = context.getDatabasePath(DB_NAME)
-//        if (!dbFile.exists()) {
-//            try {
-//                copyDatabase(dbFile)
-//            } catch (e: IOException) {
-//                throw RuntimeException("Error creating source database", e)
-//            }
-//        }
+        if (!dbFile.exists()) {
+            try {
+                copyDatabase(dbFile)
+            } catch (e: IOException) {
+                throw RuntimeException("Error creating source database", e)
+            }
+        }
         return SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READONLY)
     }
 
