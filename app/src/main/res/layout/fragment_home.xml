@@ -1,64 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="#98d9bd"
     tools:context=".ui.home.HomeFragment">
 
-
-    <Button
-        android:id="@+id/btn_search"
-        android:layout_width="162dp"
-        android:layout_height="67dp"
-        android:text="Search"
-        android:textSize="30sp"
-        android:fontFamily="@font/celia_garcia"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tables"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.354" />
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@android:color/holo_orange_light"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@android:color/holo_orange_light"
+        app:tabTextColor="@color/black" />
 
-    <Button
-        android:id="@+id/btn_detail"
-        android:layout_width="147dp"
-        android:layout_height="62dp"
-        android:fontFamily="@font/celia_garcia"
-        android:text="Detail"
-        android:textSize="28sp"
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_home"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:animateLayoutChanges="true"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_search"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@id/tables" />
 
-    <Button
-        android:id="@+id/btn_selected"
-        android:layout_width="129dp"
-        android:layout_height="53dp"
-        android:fontFamily="@font/celia_garcia"
-        android:text="Selected"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_exit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_detail"
-        app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/btn_exit"
-        android:layout_width="83dp"
-        android:layout_height="44dp"
-        android:fontFamily="@font/celia_garcia"
-        android:text="Exit"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_detail"
-        app:layout_constraintVertical_bias="0.167" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,15 @@
-package com.humbur.shortdictionary.ui.search
+package com.humbur.shortdictionary.adapter
 
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.humbur.shortdictionary.R
 import com.humbur.shortdictionary.databinding.RowItemBinding
 import com.humbur.shortdictionary.model.Dictionary
 
-class Adapter(
+class WordAdapter(
     private var list: List<Dictionary>, private val setOnClickedListener: SetOnClickedListener
-) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+) : RecyclerView.Adapter<WordAdapter.ViewHolder>() {
 
 
     inner class ViewHolder(val binding: RowItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -21,17 +21,34 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.txtShortWord.text = list[position].short
-        holder.binding.txtDesc.text = list[position].full
-        holder.binding.imgFovarite.setOnClickListener{
+        with(holder) {
+            with(list[position]) {
+                binding.txtShortWord.text = short
+                binding.txtDesc.text = full
+                binding.imgFovarite.setImageResource(
+                    if (favorite) R.drawable.ic_star_full
+                    else R.drawable.ic_star_empty
+                )
+                binding.imgFovarite.setOnClickListener {
+                    if (id != null) {
+                        favorite = !favorite
+                        notifyItemChanged(position)
+                        setOnClickedListener.addFavorite(id, favorite)
+                    }
+                }
+            }
+        }
+        holder.itemView.setOnClickListener {
             setOnClickedListener.itemClicked(position)
         }
+
     }
 
     override fun getItemCount() = list.size
 
     interface SetOnClickedListener{
         fun itemClicked(position: Int)
+        fun addFavorite(id: Int, state:Boolean)
     }
 
 }

@@ -8,6 +8,5 @@ import android.view.translation.ViewTranslationResponse
 class CustimView(context: Context) : View(context) {
     override fun onVirtualViewTranslationResponses(response: LongSparseArray<ViewTranslationResponse>) {
         super.onVirtualViewTranslationResponses(response)
-        response
     }
 }
