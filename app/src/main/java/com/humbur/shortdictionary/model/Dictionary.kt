@@ -1,11 +1,10 @@
 package com.humbur.shortdictionary.model
 
-import com.humbur.shortdictionary.local.entity.Favorite
-
 data class Dictionary(
-    val id: Int? = null,
-    val short: String? = null,
-    val full: String? = null,
-    val uzb: String? = null,
+    var id: Int = 0,
+    var eng: String,
+    var uzb: String,
+    var shortA: String? = null,
+    var typeA: String? = null,
     var favorite: Boolean = false
 )

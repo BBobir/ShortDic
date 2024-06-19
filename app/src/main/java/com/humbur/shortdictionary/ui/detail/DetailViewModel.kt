@@ -23,17 +23,18 @@ class DetailViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
     private fun getWordById(id: String) {
         val data = AssetDatabaseOpenHelper(App.application, "dictionary.db")
         data.saveDatabase()
-            .rawQuery("SELECT * FROM `abbreviations` WHERE `abbr_id` = $id", null)
+            .rawQuery("SELECT * FROM `WordsEntity` WHERE `id` = $id", null)
             .use { cursor ->
 
                 if (cursor.moveToFirst()) {
-                    if (cursor.getString(1).isNotEmpty()) {
-                        val ido = cursor.getInt(0)
-                        val short = cursor.getString(1)
-                        val full = cursor.getString(2)
-                        val uzb = cursor.getString(3)
-                        _getWord.value = Dictionary(ido, short, full, uzb, true)
-                    }
+                    val id = cursor.getInt(0)
+                    val eng = cursor.getString(1)
+                    val uzb = cursor.getString(2)
+                    val short = cursor.getString(3)
+                    val type = cursor.getString(4)
+
+
+                    _getWord.value = Dictionary(id = id, eng = eng, uzb = uzb, shortA = short, typeA = type)
                 }
             }
 

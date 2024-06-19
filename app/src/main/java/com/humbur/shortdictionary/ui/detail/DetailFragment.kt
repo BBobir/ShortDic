@@ -23,17 +23,29 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDetailBinding.bind(view)
-        tts = TextToSpeech(requireContext(), object : TextToSpeech.OnInitListener {
-            override fun onInit(status: Int) {
+        tts = TextToSpeech(requireContext()) {
 
-            }
-
-        })
+        }
 
         viewModel.getWord.observe(viewLifecycleOwner){
-            binding.wordEng.text = it.full
-            binding.wordUz.text = it.uzb
-            binding.title.text = it.short
+            when(it.typeA){
+                "Sh" ->{
+                    binding.wordEng.text = it.eng
+                    binding.wordUz.text = it.uzb
+                    binding.title.text = it.shortA
+                }
+                "Te"->{
+                    binding.wordEng.text = it.eng
+                    binding.wordUz.text = it.uzb
+                    binding.title.text = ""
+                }
+                "Tr"->{
+                    binding.wordEng.text = it.eng
+                    binding.wordUz.text = it.uzb
+                    binding.title.text = ""
+                }
+            }
+
         }
 
         binding.close.setOnClickListener {

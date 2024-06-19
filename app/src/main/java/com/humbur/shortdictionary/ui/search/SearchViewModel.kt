@@ -1,6 +1,5 @@
 package com.humbur.shortdictionary.ui.search
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,19 +26,20 @@ class SearchViewModel(private val assetDatabaseOpenHelper: AssetDatabaseOpenHelp
         val list = ArrayList<Dictionary>()
         val appDatabase = AppDatabase.getDatabase()
         viewModelScope.launch(Dispatchers.IO) {
-            //val data = AssetDatabaseOpenHelper(context, "database.db")
-            val cursor = assetDatabaseOpenHelper.saveDatabase().rawQuery("SELECT * FROM `abbreviations`", null)
+
+            val cursor = assetDatabaseOpenHelper.saveDatabase().rawQuery("SELECT * FROM `WordsEntity` ORDER BY `eng` ASC", null)
             while (cursor.moveToNext()) {
                 if (cursor.getString(1).isNotEmpty()) {
                     val id = cursor.getInt(0)
-                    val short = cursor.getString(1)
-                    val full = cursor.getString(2)
-                    val uzb = cursor.getString(3)
+                    val eng = cursor.getString(1)
+                    val uzb = cursor.getString(2)
+                    val short = cursor.getString(3)
+                    val type = cursor.getString(4)
 
                     if (appDatabase.favoiteDao().getFavoriteById(id) == 0) {
-                        list.add(Dictionary(id, short, full, uzb))
+                        list.add(Dictionary(id = id, eng = eng, uzb = uzb, shortA = short, typeA = type))
                     } else {
-                        list.add(Dictionary(id, short, full, uzb, true))
+                        list.add(Dictionary(id = id, eng = eng, uzb = uzb, shortA = short, typeA = type, favorite = true))
                     }
                 }
             }
@@ -52,19 +52,18 @@ class SearchViewModel(private val assetDatabaseOpenHelper: AssetDatabaseOpenHelp
         val list = ArrayList<Dictionary>()
         val appDatabase = AppDatabase.getDatabase()
         viewModelScope.launch(Dispatchers.IO) {
-            val cursor = assetDatabaseOpenHelper.saveDatabase().rawQuery("SELECT * FROM `abbreviations` WHERE `abbr_abbreviation` LIKE '%$word%' OR `abbr_extension` LIKE '%$word%'", null)
+            val cursor = assetDatabaseOpenHelper.saveDatabase().rawQuery("SELECT * FROM `WordsEntity` WHERE `eng` LIKE '%$word%' OR `shortA` LIKE '%$word%'", null)
             while (cursor.moveToNext()) {
-                if (cursor.getString(1).isNotEmpty()) {
-                    val id = cursor.getInt(0)
-                    val short = cursor.getString(1)
-                    val full = cursor.getString(2)
-                    val uzb = cursor.getString(3)
+                val id = cursor.getInt(0)
+                val eng = cursor.getString(1)
+                val uzb = cursor.getString(2)
+                val short = cursor.getString(3)
+                val type = cursor.getString(4)
 
-                    if (appDatabase.favoiteDao().getFavoriteById(id) == 0) {
-                        list.add(Dictionary(id, short, full, uzb))
-                    } else {
-                        list.add(Dictionary(id, short, full, uzb, true))
-                    }
+                if (appDatabase.favoiteDao().getFavoriteById(id) == 0) {
+                    list.add(Dictionary(id = id, eng = eng, uzb = uzb, shortA = short, typeA = type))
+                } else {
+                    list.add(Dictionary(id = id, eng = eng, uzb = uzb, shortA = short, typeA = type, favorite = true))
                 }
             }
             _allWords.postValue(Resource.success(list))
