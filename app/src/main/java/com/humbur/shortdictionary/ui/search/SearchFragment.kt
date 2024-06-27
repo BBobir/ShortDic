@@ -2,7 +2,6 @@ package com.humbur.shortdictionary.ui.search
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -12,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.humbur.shortdictionary.R
 import com.humbur.shortdictionary.adapter.WordAdapter
 import com.humbur.shortdictionary.databinding.FragmentSearch2Binding
-import com.humbur.shortdictionary.local.AssetDatabaseOpenHelper
 import com.humbur.shortdictionary.utils.Resource
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -25,15 +23,16 @@ class SearchFragment : Fragment(R.layout.fragment_search2) {
     private lateinit var viewModel: SearchViewModel
 
     private var job: Job? = null
+    private lateinit var repository: SearchRepository
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearch2Binding.bind(view)
-        val data = AssetDatabaseOpenHelper(requireContext(), "dictionary.db")
+        repository = SearchRepository(requireContext())
 
         viewModel = ViewModelProvider(
             this,
-            SearchViewModelFactory(data)
+            SearchViewModelFactory(repository)
         )[SearchViewModel::class.java]
 
         viewModel.allWords.observe(viewLifecycleOwner) {

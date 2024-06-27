@@ -9,7 +9,7 @@ import java.io.OutputStream
 
 
 class AssetDatabaseOpenHelper(private val context: Context, private val DB_NAME: String) {
-    fun saveDatabase(): SQLiteDatabase {
+   suspend fun saveDatabase(): SQLiteDatabase {
         val dbFile = context.getDatabasePath(DB_NAME)
         if (!dbFile.exists()) {
             try {

@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.humbur.shortdictionary.App
 import com.humbur.shortdictionary.local.AssetDatabaseOpenHelper
 import com.humbur.shortdictionary.model.Dictionary
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DetailViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
 
@@ -21,23 +24,25 @@ class DetailViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
     }
 
     private fun getWordById(id: String) {
-        val data = AssetDatabaseOpenHelper(App.application, "dictionary.db")
-        data.saveDatabase()
-            .rawQuery("SELECT * FROM `WordsEntity` WHERE `id` = $id", null)
-            .use { cursor ->
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = AssetDatabaseOpenHelper(App.application, "dictionary.db")
+            data.saveDatabase()
+                .rawQuery("SELECT * FROM `WordsEntity` WHERE `id` = $id", null)
+                .use { cursor ->
 
-                if (cursor.moveToFirst()) {
-                    val id = cursor.getInt(0)
-                    val eng = cursor.getString(1)
-                    val uzb = cursor.getString(2)
-                    val short = cursor.getString(3)
-                    val type = cursor.getString(4)
+                    if (cursor.moveToFirst()) {
+                        val id = cursor.getInt(0)
+                        val eng = cursor.getString(1)
+                        val uzb = cursor.getString(2)
+                        val short = cursor.getString(3)
+                        val type = cursor.getString(4)
 
 
-                    _getWord.value = Dictionary(id = id, eng = eng, uzb = uzb, shortA = short, typeA = type)
+                        _getWord.postValue(Dictionary(id = id, eng = eng, uzb = uzb, shortA = short, typeA = type))
+
+                    }
                 }
-            }
-
+        }
 
     }
 
